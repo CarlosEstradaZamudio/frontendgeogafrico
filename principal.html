@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IMPLAN Cuautla</title>
+
+    <link rel="icon" href="img/logo_pequeño2.png" type="image/png">
+    
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.css"
+    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-easyprint/2.1.9/easyPrint.css">
+    <link rel="stylesheet" href="css/main.css" />
+  </head>
+
+  <body>
+    <header class="header">
+      <div class="header-contenedor">
+        <div>
+          <img src="img/logo_blanco.png" alt="Logo" class="imagen" />
+        </div>
+      </div>
+    </header>
+
+    <main class="main-contenido">
+      
+      <aside class="sidebar-izquierda" id="sidebar">
+            <div class="layer-list-container">
+                <h3 class="layer-list-title">Capas de Información</h3>
+                
+                <ul class="layer-list">
+                  
+                  <li class="layer-group">
+                    <div class="layer-group-header">
+                      <input type="checkbox" class="parent-checkbox" id="grupo_planeacion">
+                      <label for="grupo_planeacion">Capa 1</label>
+                      <button class="toggle-sublayers"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <ul class="sublayer-list">
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 1 </label></li>
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 2 </label></li>
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 3 </label></li>
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 4 </label></li>
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 5 </label></li>
+                    </ul>
+                  </li>
+              
+                  <li class="layer-group">
+                    <div class="layer-group-header">
+                      <input type="checkbox" class="parent-checkbox" id="grupo_equipamiento">
+                      <label for="grupo_equipamiento"> Capa 2</label>
+                      <button class="toggle-sublayers"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <ul class="sublayer-list">
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 1 </label></li>
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 2 </label></li>
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 3 </label></li>
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 4 </label></li>
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 5 </label></li>
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 6 </label></li>
+                    </ul>
+                  </li>
+              
+                  <li class="layer-group">
+                    <div class="layer-group-header">
+                      <input type="checkbox" class="parent-checkbox" id="grupo_infraestructura">
+                      <label for="grupo_infraestructura">Capa 3</label>
+                      <button class="toggle-sublayers"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <ul class="sublayer-list">
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 1 </label></li>
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 2 </label></li>
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 3 </label></li>
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 4 </label></li>
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 5 </label></li>
+                    </ul>
+                  </li>
+                  
+                  <li class="layer-group">
+                    <div class="layer-group-header">
+                      <input type="checkbox" class="parent-checkbox" id="grupo_riesgos">
+                      <label for="grupo_riesgos">Capa 4</label>
+                      <button class="toggle-sublayers"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <ul class="sublayer-list">
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 1 </label></li>
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 2 </label></li>
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 3 </label></li>
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 4 </label></li>
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 5 </label></li>
+                    </ul>
+                  </li>
+              
+                  <li class="layer-group">
+                    <div class="layer-group-header">
+                      <input type="checkbox" class="parent-checkbox" id="grupo_catastro">
+                      <label for="grupo_catastro">Capa 5</label>
+                      <button class="toggle-sublayers"><i class="fas fa-chevron-down"></i></button>
+                    </div>
+                    <ul class="sublayer-list">
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 1 </label></li>
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 2 </label></li>
+                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 3 </label></li>
+                    </ul>
+                  </li>
+              
+                </ul>
+              </div>
+        </aside>
+
+      <div id="map"></div>
+
+      <button id="toggle-sidebar" class="toggle-button">
+        <i class="fa-solid fa-chevron-right"></i>
+      </button>
+
+      <div class="map-controls-container" id="mapControls">
+        <div class="map-controls-trigger">
+          <i class="fas fa-layer-group"></i>
+        </div>
+
+        <div class="map-styles-panel">
+          <div class="map-style-button active" id="mapa-base">
+            <img
+              src="img/base.png"
+              alt="Mapa base"
+            />
+            <p>Base</p>
+          </div>
+          <div class="map-style-button" id="mapa-satelital">
+            <img
+              src="img/satelital.png"
+              alt="Mapa satelital"
+            />
+            <p>Satelital</p>
+          </div>
+          <div class="map-style-button" id="mapa-topografico">
+            <img
+              src="img/topografico.png"
+              alt="Mapa topográfico"
+            />
+            <p>Topográfico</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+     <footer class="footer">
+      © 2025 IMPLAN Cuautla. Todos los derechos reservados.
+    </footer>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    
+    <script src="https://unpkg.com/@geoman-io/leaflet-geoman-free@latest/dist/leaflet-geoman.js"></script>
+
+    <script src="https://unpkg.com/leaflet-geometryutil@0.10.2/src/leaflet.geometryutil.js"></script>
+
+    <script src="https://unpkg.com/leaflet-geometryutil"></script>
+
+    <script src="js/main.js"></script>
+  </body>
+</html>

@@ -40,23 +40,29 @@
       
       <aside class="sidebar-izquierda" id="sidebar">
             <div class="layer-list-container">
-                <h3 class="layer-list-title">Capas de Información</h3>
+                <h3 class="layer-list-title">Capas del Mapa</h3>
                 
                 <ul class="layer-list">
+
+                  <li class="layer-group">
+                    <div class="layer-group-header">
+                      <input type="checkbox" class="parent-checkbox" id="grupo_estado">
+                      <label for="grupo_estado">Estado</label>
+                    </div>
+                  </li>
                   
                   <li class="layer-group">
                     <div class="layer-group-header">
-                      <input type="checkbox" class="parent-checkbox" id="grupo_planeacion">
-                      <label for="grupo_planeacion">Capa 1</label>
-                      <button class="toggle-sublayers"><i class="fas fa-chevron-down"></i></button>
+                      <input type="checkbox" class="parent-checkbox" id="grupo_municipios">
+                      <label for="grupo_municipios">Capa 1</label>
                     </div>
-                    <ul class="sublayer-list">
-                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 1 </label></li>
-                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 2 </label></li>
-                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 3 </label></li>
-                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 4 </label></li>
-                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 5 </label></li>
-                    </ul>
+                  </li>
+
+                  <li class="layer-group">
+                    <div class="layer-group-header">
+                      <input type="checkbox" class="parent-checkbox" id="grupo_localidades">
+                      <label for="grupo_localidades">Localidades</label>
+                    </div>
                   </li>
               
                   <li class="layer-group">
@@ -93,7 +99,7 @@
                   <li class="layer-group">
                     <div class="layer-group-header">
                       <input type="checkbox" class="parent-checkbox" id="grupo_riesgos">
-                      <label for="grupo_riesgos">Capa 4</label>
+                      <label for="grupo_riesgos">Poblacion</label>
                       <button class="toggle-sublayers"><i class="fas fa-chevron-down"></i></button>
                     </div>
                     <ul class="sublayer-list">
@@ -105,18 +111,6 @@
                     </ul>
                   </li>
               
-                  <li class="layer-group">
-                    <div class="layer-group-header">
-                      <input type="checkbox" class="parent-checkbox" id="grupo_catastro">
-                      <label for="grupo_catastro">Capa 5</label>
-                      <button class="toggle-sublayers"><i class="fas fa-chevron-down"></i></button>
-                    </div>
-                    <ul class="sublayer-list">
-                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 1 </label></li>
-                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 2 </label></li>
-                      <li><label><input type="checkbox" class="child-checkbox"> Subcapa 3 </label></li>
-                    </ul>
-                  </li>
               
                 </ul>
               </div>

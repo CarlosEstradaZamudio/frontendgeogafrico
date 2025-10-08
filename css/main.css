@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Montserrat', sans-serif;
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -124,7 +124,7 @@ body {
     text-align: center;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease, border-color 0.2s ease;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .map-style-button:hover {
@@ -160,11 +160,12 @@ body {
 
 /* Sidebar (configuración inicial y transición) */
 .sidebar-izquierda {
+    height: 100%; 
     position: absolute;
     top: 0;
     left: 0;
     width: 300px; /* Ancho de tu sidebar, ajústalo si es necesario */
-    height: 100%;
+    /* Se elimina height: 100% por redundancia con 100vh */
     background-color: #00653e; /* Asegúrate de que tenga un fondo */
     box-shadow: 2px 0px 10px rgba(0,0,0,0.1);
     z-index: 1001; /* Por encima del mapa y otros elementos */
@@ -172,6 +173,12 @@ body {
     /* Estado oculto por defecto (movido a la izquierda) */
     transform: translateX(-100%);
     transition: transform 0.4s ease-in-out;
+
+    /* --- MODIFICADO --- */
+    /* 1. Convertimos el sidebar en un contenedor flexbox.
+       Esto nos permitirá controlar la altura de los elementos hijos. */
+    display: flex;
+    flex-direction: column;
 }
 
 /* Estilo y posición del botón que controla el sidebar */
@@ -216,24 +223,44 @@ body {
 
 .layer-list-container {
     /* Añadimos un padding superior para dejar espacio al botón de toggle */
-    padding: 60px 15px 20px 15px; 
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 30px 15px 20px 5px; 
+    font-family: 'Montserrat', sans-serif;
     color: #ffffff; /* Color de texto principal blanco para contraste */
+
+    /* --- MODIFICADO --- */
+    /* 2. Hacemos que este contenedor también sea flex y ocupe todo el espacio sobrante. */
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    /* Importante: evitamos que este contenedor tenga scroll, lo queremos en la lista de abajo */
+    overflow: hidden; 
 }
 
 .layer-list-title {
-    margin: 0 0 15px 5px;
+    margin: 0 0 1px 40px;
     font-size: 1em;
     font-weight: 600;
     color: #ffffff; /* Título en blanco */
     border-bottom: 1px solid rgba(255, 255, 255, 0.3); /* Línea divisora sutil */
     padding-bottom: 10px;
+    /* AÑADIDO: Evita que el título se encoja */
+    flex-shrink: 0;
 }
 
-.layer-list, .sublayer-list {
+/* --- MODIFICADO --- */
+/* 3. ¡AQUÍ ESTÁ LA MAGIA! Hacemos que la lista ocupe el espacio restante y tenga scroll */
+.layer-list {
+    flex-grow: 1; /* Le decimos que ocupe todo el espacio vertical que queda */
+    overflow-y: auto; /* Le añadimos la barra de scroll SOLO si es necesario */
+    /* AÑADIDO: Un pequeño padding a la derecha para que la barra de scroll no se pegue al texto */
+    padding-right: 5px;
+}
+
+.sublayer-list {
     list-style: none;
     padding: 0;
     margin: 0;
+    /* Se quita padding-right de aquí para que herede del padre (.layer-list) */
 }
 
 .layer-group {

@@ -4,7 +4,7 @@ var map = L.map("map", {
     minZoom: 3,
     maxZoom: 18,
     attributionControl: false
-}).setView([18.8206, -98.93525], 14);
+}).setView([18.8206, -98.93525], 13);
 
 var base = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 18,
@@ -25,6 +25,127 @@ var topografico = L.tileLayer(
 L.control.scale({ position: "bottomleft", maxWidth: 200, metric: true }).addTo(map);
 L.control.zoom({ position: "topright" }).addTo(map);
 
+
+// ======================= CARGA Y GESTIÓN DE CAPAS TEMÁTICAS =======================
+// --- 1. VARIABLES PARA ALMACENAR LAS CAPAS ---
+let capaMunicipios = null;
+let capaMarginacion = null;
+let capaAyudantias = null;
+
+// --- 2. FUNCIÓN PARA ESTILO DE CAPA MARGINACIÓN (COROPLÉTICO) ---
+function getColor(grado) {
+    switch (grado) {
+        case 'Muy alto': return '#800026';
+        case 'Alto':     return '#BD0026';
+        case 'Medio':    return '#E31A1C';
+        case 'Bajo':     return '#FC4E2A';
+        case 'Muy bajo': return '#FD8D3C';
+        default:         return '#FFEDA0'; // Color para valores no esperados
+    }
+}
+
+// --- 3. FUNCIONES PARA CARGAR DATOS DESDE LOS SERVIDORES ---
+// Carga de la capa de MUNICIPIOS desde GeoServer (WFS)
+function cargarCapaMunicipios() {
+    // Asegúrate de que esta URL sea accesible desde donde ejecutas la página
+    const geoServerUrl = "http://192.168.1.67:8080/geoserver/municipios/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=municipios:municipios&outputFormat=application/json&srsName=EPSG:4326";
+
+    fetch(geoServerUrl)
+        .then(response => {
+            if (!response.ok) throw new Error(`Error en GeoServer: ${response.status}`);
+            return response.json();
+        })
+        .then(data => {
+            capaMunicipios = L.geoJSON(data, {
+                style: {
+                    color: '#007bff',
+                    weight: 1.5,
+                    fillColor: '#5a99e2',
+                    fillOpacity: 0.4,
+                },
+                onEachFeature: function (feature, layer) {
+                    if (feature.properties && feature.properties.nomgeo) {
+                        layer.bindPopup(`<h3>${feature.properties.nomgeo}</h3>`);
+                    }
+                },
+            });
+            console.log("Capa de municipios cargada y lista.");
+        })
+        .catch(error => {
+            console.error("Falló la petición a GeoServer:", error);
+            // Opcional: alertar al usuario
+            // alert("No se pudo cargar la capa de municipios. Revisa la consola para más detalles.");
+        });
+}
+
+// Carga de la capa de MARGINACIÓN desde la API de Django
+function cargarCapaMarginacion() {
+    // Asegúrate de que tu servidor Django esté corriendo en esta dirección
+    fetch("http://127.0.0.1:8000/api/marginacion/")
+        .then(response => response.json())
+        .then(data => {
+            capaMarginacion = L.geoJSON(data, {
+                style: function (feature) {
+                    return {
+                        fillColor: getColor(feature.properties.gm_2020),
+                        weight: 1,
+                        opacity: 1,
+                        color: 'white',
+                        dashArray: '3',
+                        fillOpacity: 0.7,
+                    };
+                },
+                onEachFeature: function (feature, layer) {
+                    const props = feature.properties;
+                    layer.bindPopup(`<h4>${props.colonia}</h4><b>Grado de Marginación:</b> ${props.gm_2020}`);
+                },
+            });
+            console.log("Capa de marginación cargada y lista.");
+        })
+        .catch(error => {
+            console.error("Falló la petición a la API de Django:", error);
+            // Opcional: alertar al usuario
+            // alert("No se pudo cargar la capa de marginación. Revisa la consola para más detalles.");
+        });
+}
+
+function cargarAyudantias() {
+    
+    const puntosUrl = "http://192.168.1.67:8080/geoserver/implan/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=implan%3Aayudantias&outputFormat=application%2Fjson&srsName=EPSG:4326";
+
+    fetch(puntosUrl)
+        .then(response => {
+            if (!response.ok) throw new Error(`Error en el servidor de puntos: ${response.status}`);
+            return response.json();
+        })
+        .then(data => {
+            capaAyudantias = L.geoJSON(data, {
+                // Esta es la opción clave para puntos
+                pointToLayer: function (feature, latlng) {
+                    // Usamos L.circleMarker para tener control total del estilo
+                    return L.circleMarker(latlng, {
+                        radius: 6,
+                        fillColor: "#ff7800", // Naranja
+                        color: "#000",
+                        weight: 1,
+                        opacity: 1,
+                        fillOpacity: 0.8
+                    });
+                }
+            });
+            console.log("Capa de puntos de interés cargada y lista.");
+        })
+        .catch(error => {
+            console.error("Falló la petición de la capa de puntos:", error);
+        });
+}
+
+// --- 4. INICIAR LA CARGA DE DATOS AL CARGAR LA PÁGINA ---
+cargarCapaMunicipios();
+cargarCapaMarginacion();
+cargarAyudantias();
+
+
 // ======================= EVENTOS DOM =======================
 document.addEventListener("DOMContentLoaded", () => {
     // --- 1. TOGGLE DEL SIDEBAR ---
@@ -44,6 +165,8 @@ document.addEventListener("DOMContentLoaded", () => {
             icon.classList.remove("fa-chevron-left");
             icon.classList.add("fa-chevron-right");
         }
+        // IMPORTANTE: Ajustar el tamaño del mapa después de la animación del sidebar
+        setTimeout(() => map.invalidateSize(), 300);
     });
 
     // --- 2. CAMBIO DE CAPAS BASE ---
@@ -93,6 +216,46 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // --- 4. LISTA DE CAPAS INTERACTIVA ---
+    
+    // **AÑADIDO**: Conexión de checkboxes con la lógica de capas
+    const checkMunicipios = document.getElementById("grupo_municipios");
+    const checkMarginacion = document.getElementById("grupo_equipamiento");
+    const checkAyudantias = document.getElementById("grupo_infraestructura");
+    
+    // **OPCIONAL**: Cambiar etiquetas para que sean más descriptivas
+    document.querySelector('label[for="grupo_municipios"]').textContent = "Municipios";
+    document.querySelector('label[for="grupo_equipamiento"]').textContent = "Grado de Marginación";
+    document.querySelector('label[for="grupo_infraestructura"]').textContent = "Ayudantias";
+
+    
+    checkMunicipios.addEventListener('change', function() {
+        if(this.checked) {
+            if (capaMunicipios) capaMunicipios.addTo(map);
+            else alert("La capa de municipios aún está cargando...");
+        } else {
+            if (capaMunicipios) map.removeLayer(capaMunicipios);
+        }
+    });
+
+    checkMarginacion.addEventListener('change', function() {
+        if(this.checked) {
+            if (capaMarginacion) capaMarginacion.addTo(map);
+            else alert("La capa de marginación aún está cargando...");
+        } else {
+            if (capaMarginacion) map.removeLayer(capaMarginacion);
+        }
+    });
+
+    checkAyudantias.addEventListener('change', function() {
+        if(this.checked) {
+            if (capaAyudantias) capaAyudantias.addTo(map);
+            else alert("La capa de ayudantias aún está cargando...");
+        } else {
+            if (capaAyudantias) map.removeLayer(capaAyudantias);
+        }
+    });
+
+
     const toggleButtons = document.querySelectorAll(".toggle-sublayers");
     toggleButtons.forEach(button => {
         button.addEventListener("click", (event) => {
@@ -109,6 +272,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (parentCheckbox) {
             parentCheckbox.addEventListener("change", () => {
+                // Si la capa es de las que cargamos, no propagar a hijos inexistentes
+                if (parentCheckbox.id === 'grupo_equipamiento' || parentCheckbox.id === 'grupo_infraestructura') {
+                    const sublist = group.querySelector('.sublayer-list');
+                    return;
+                }
                 childCheckboxes.forEach(child => {
                     child.checked = parentCheckbox.checked;
                 });
@@ -135,7 +303,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+
 // ======================= GEOMAN =======================
+// ... (Tu código de Geoman y Medición permanece exactamente igual aquí abajo) ...
 
 // Botón de inicio
 const goHomeOptions = {
@@ -270,4 +440,3 @@ map.on('pm:create', function(e) {
     finalLayer.on('pm:edit', (ev) => updatePopup(ev.layer));
   }
 });
-

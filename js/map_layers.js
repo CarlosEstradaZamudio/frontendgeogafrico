@@ -8,13 +8,33 @@ export function initializeMap() {
         zoomControl: false,
         minZoom: 3,
         maxZoom: 18,
-        attributionControl: false
+        attributionControl: true
     }).setView([18.8206, -98.93525], 13);
     
-    const base = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
-    const satelital = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}");
-    const topografico = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}");
+    const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' + 
+                     ' | &copy; 2025 IMPLAN Cuautla'
+    }).addTo(map);
+    
+    // 1. OpenStreetMap
+    const base = L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' +
+                 ' | &copy; 2025 IMPLAN Cuautla'
+    });
 
+// 2. Esri Satelital
+    const satelital = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {
+    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community' +
+                 ' | &copy; 2025 IMPLAN Cuautla'
+    });
+
+// 3. Esri Topográfico
+    const topografico = L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}", {
+    attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community' +
+                 ' | &copy; 2025 IMPLAN Cuautla'
+    });
+
+    
     L.control.scale({ position: "bottomleft", maxWidth: 200, metric: true }).addTo(map);
     L.control.zoom({ position: "topright" }).addTo(map);
 
@@ -61,7 +81,7 @@ map.pm.addControls({
     editMode: true,
     dragMode: true,
     cutPolygon: true,
-    rotateMode: true,
+    rotateMode: false,
 });
 
 // Cambiar icono de marcador

@@ -59,8 +59,8 @@ body {
 /* Contenedor principal que se posiciona sobre el mapa */
 .map-controls-container {
     position: absolute;
-    bottom: 10px;
-    right: 50px;
+    bottom: 30px;
+    right: 20px;
     z-index: 401; /* Un z-index alto para estar sobre el mapa */
 }
 

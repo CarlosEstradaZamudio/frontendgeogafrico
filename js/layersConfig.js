@@ -18,9 +18,9 @@ export const layersConfig = [
         id: 'capa_municipios',
         controlId: 'grupo_municipios', // <-- Coincide con el ID del checkbox en el HTML
         name: 'Municipios',
-        url: 'http://192.168.1.67:8080/geoserver/municipios/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=municipios:municipios&outputFormat=application/json&srsName=EPSG:4326',
+        url: 'http://192.168.1.67:8080/geoserver/implan/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=implan%3Amunicipios&outputFormat=application%2Fjson&srsName=EPSG:4326',
         style: { color: '#007bff', weight: 1.5, fillColor: '#5a99e2', fillOpacity: 0.4 },
-        popup: (feature) => `<h3>${feature.properties.nomgeo}</h3>`
+        popup: (feature) => `<h3>${feature.properties.NOMGEO}</h3>`
     },
 
     {
@@ -84,10 +84,30 @@ export const layersConfig = [
         url: 'http://192.168.1.67:8080/geoserver/implan/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=implan%3Avialidades&outputFormat=application%2Fjson&srsName=EPSG:4326',
         style: {
         color: '#3388ff',       // Color de la línea
-        weight: 3,              // Grosor de la línea en píxeles
+        weight: 6,              // Grosor de la línea en píxeles
         opacity: 0.9,           // Opacidad de la línea (de 0 a 1)
-        // Opcional: para líneas punteadas o discontinuas
-        // dashArray: '5, 10'   // (5px de línea, 10px de espacio)
+        },
+        popup: (feature) => `<h4>${feature.properties.NOMVIAL}</h4>`
     },
+
+    {
+        id: 'capa_unidadesdeportivas',
+        controlId: 'unidades_deportivas', // <-- Coincide con el ID del checkbox de la subcapa
+        name: 'unidades_deportivas',
+        url: 'http://192.168.1.67:8080/geoserver/implan/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=implan%3Aunidadesdeportivas&outputFormat=application%2Fjson&srsName=EPSG:4326',
+        isPoint: true,
+        pointStyle: { radius: 3, fillColor: "#000000ff", color: "#000000ff", weight: 4, opacity: 1, fillOpacity: 0.8 }
+    },
+
+    {
+        id: 'capa_cicloviasprimarias',
+        controlId: 'cicloviasprimarias', // <-- Coincide con el ID del checkbox de la subcapa
+        name: 'cicloviasprimarias',
+        url: 'http://192.168.1.67:8080/geoserver/implan/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=implan%3Acicloviasprimarias&outputFormat=application%2Fjson&srsName=EPSG:4326',
+        style: {
+        color: '#1ac268ff',       // Color de la línea
+        weight: 4,              // Grosor de la línea en píxeles
+        opacity: 0.9,           // Opacidad de la línea (de 0 a 1)
+        },
     }
 ];

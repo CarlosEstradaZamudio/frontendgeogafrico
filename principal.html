@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>IMPLAN Cuautla</title>
 
-    <link rel="icon" href="img/logo_pequeno2.png" type="image/png">
+    <link rel="icon" href="img/logo_pequeño2.png" type="image/png">
     
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
@@ -34,7 +34,7 @@
                 <li class="layer-group">
                   <div class="layer-group-header">
                     <input type="checkbox" class="parent-checkbox" id="grupo_estado">
-                    <label for="grupo_municipios">Estado</label>
+                    <label for="grupo_estado">Estado</label>
                   </div>
                 </li>
 
@@ -47,40 +47,43 @@
 
                 <li class="layer-group">
                   <div class="layer-group-header">
-                    <input type="checkbox" class="parent-checkbox" id="grupo_municipios">
-                    <label for="grupo_municipios">Localidades</label>
+                    <input type="checkbox" class="parent-checkbox" id="grupo_localidades">
+                    <label for="grupo_localidades">Localidades</label>
                   </div>
                 </li>
 
                 <li class="layer-group">
                   <div class="layer-group-header">
-                    <input type="checkbox" class="parent-checkbox" id="grupo_infraestructura">
-                    <label for="grupo_infraestructura">Movilidad</label>
+                    <input type="checkbox" class="parent-checkbox" id="grupo_movilidad">
+                    <label for="grupo_movilidad">Movilidad</label>
                     <button class="toggle-sublayers"><i class="fas fa-chevron-down"></i></button>
                   </div>
                   <ul class="sublayer-list">
                     <li><label><input type="checkbox" class="child-checkbox" id="semaforos">Semaforos</label></li>
                     <li><label><input type="checkbox" class="child-checkbox" id="vialidades">Vialidades</label></li>
+                    <li><label><input type="checkbox" class="child-checkbox" id="cicloviasprimarias">Ciclovias Primarias</label></li>
+
                   </ul>
                 </li>
 
                 <li class="layer-group">
                   <div class="layer-group-header">
-                    <input type="checkbox" class="parent-checkbox" id="grupo_equipamiento">
-                    <label for="grupo_equipamiento">Servicios Públicos</label>
+                    <input type="checkbox" class="parent-checkbox" id="grupo_serviciospublicos">
+                    <label for="grupo_serviciospublicos">Servicios Públicos</label>
                     <button class="toggle-sublayers"><i class="fas fa-chevron-down"></i></button>
                   </div>
                   <ul class="sublayer-list">
                     <li><label><input type="checkbox" class="child-checkbox" id="ayudantias">Ayudantias</label></li>
                     <li><label><input type="checkbox" class="child-checkbox" id="hospitales">Hospitales </label></li>
                     <li><label><input type="checkbox" class="child-checkbox" id="tiradero_municipaL"> Tiradero Municipal </label></li>
+                    <li><label><input type="checkbox" class="child-checkbox" id="unidades_deportivas">Unidades Deportivas</label></li>
                   </ul>
                 </li>
               
                 <li class="layer-group">
                   <div class="layer-group-header">
-                    <input type="checkbox" class="parent-checkbox" id="grupo_infraestructura">
-                    <label for="grupo_infraestructura">Socieconómico</label>
+                    <input type="checkbox" class="parent-checkbox" id="grupo_socieconomico">
+                    <label for="grupo_socieconomico">Socieconómico</label>
                     <button class="toggle-sublayers"><i class="fas fa-chevron-down"></i></button>
                   </div>
                   <ul class="sublayer-list">
